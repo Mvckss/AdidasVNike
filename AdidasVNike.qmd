@@ -1,0 +1,86 @@
+---
+title: "A Brief Analysis of Adidas and Nike's Shoes Sales"
+subtitle: "AUTHOR: Kien Anh Le"
+
+format: 
+    html:
+      embed-resources: true
+      code-fold: true
+      title-block-banner: true
+      toc: true
+      code-block-bg: true
+      code-block-border-left: "#78C2AD"
+      theme: minty
+      mainfont: spectral
+---
+
+# I. A Brief History Lesson
+
+## Adidas: From Craftsmanship to Global Icon
+
+Founded in **1949** by **Adi Dassler** in Germany, Adidas started with a simple vision: create high-quality athletic shoes to support athletes. Adi designed shoes with innovative spikes for better grip, gaining global recognition when German sprinter **Jesse Owens** wore Dassler-made shoes in the 1936 Olympics, snagging four gold medals. By the 1970s, Adidas had firmly rooted itself in sports, with its **three-stripe** logo becoming iconic. Famous for models like the **Superstar** and **Stan Smith**, Adidas blended function and style, branching into lifestyle and streetwear. Today, Adidas is known for technological footwear advancements, like the **Boost** sole and **Primeknit** fabric, appealing to athletes and sneakerheads alike.
+
+## Nike: Innovation and Endorsement-Driven Dominance
+
+Nike, originally **Blue Ribbon Sports**, was founded in **1964** by **Phil Knight** and **Bill Bowerman**. It initially distributed Japanese shoes before releasing its own design, the **Nike Cortez**, in 1972. Rebranding as Nike, the company adopted the **Swoosh** and launched an aggressive athlete endorsement strategy, famously signing **Michael Jordan** in 1984 and releasing the iconic **Air Jordan** series. This strategy propelled Nike to the forefront of sportswear, with innovations like the **Air Max** line, known for visible air-cushioning, and **Flyknit** technology for lightweight support. Today, Nike’s blend of tech, performance, and exclusive releases fuels its continued popularity and reputation as a global leader in footwear.
+
+Both of these companies have revolutionized footwear. They made basketball shoes a staple of hip culture. They made sliders a cultural icon in all tropical regions. Funnily, they made counterfeit products an entire fashion line.
+
+# II. What's Popping With Their Shoes?
+
+```{python, warning = FALSE, message = FALSE}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("Adidas Vs Nike.csv")
+
+df.rename(columns = {"Brand":"Line"},inplace=True)
+df["Brand"] = df["Line"].apply(lambda x: "Adidas" if "Adidas" in x else "Nike")
+df = df.loc[df['Reviews'] != 0]
+```
+
+```{python, warning = FALSE, message = FALSE}
+# 1. Brand Distribution and Average Ratings
+plt.figure(figsize=(8, 7))
+sns.boxplot(x='Brand', y='Rating', data=df)
+plt.title('Rating Distribution by Brand')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```
+
+Nike shoes consistently receive higher ratings (out of 5) compared to Adidas, often due to their combination of innovative design and superior comfort. Nike’s pioneering **Air cushioning** technology, seen in models like the **Air Max** and **Air Jordan**, has set a high standard for impact absorption and comfort, which many reviewers praise as ideal for everyday wear and high-performance activities. Additionally, Nike's **Flyknit** material is lightweight and breathable, making their shoes comfortable over long periods. Another factor is Nike's strong athlete endorsements and cultural impact, especially with limited releases that drive exclusivity, leading consumers to feel part of a unique community. While Adidas excels with classics like **Boost** and the **Ultraboost** for lifestyle and running, Nike’s continuous innovation and marketing edge often make its products feel fresher and more technically advanced, translating to higher user satisfaction and better ratings overall.
+
+```{python, warning = FALSE, message = FALSE}
+# 2. Reviews vs Rating Analysis with Brand distinction
+plt.figure(figsize=(8, 7))
+sns.scatterplot(data=df, x='Reviews', y='Rating', hue='Brand', size='Listing Price',sizes=(50, 400), alpha=0.6)
+plt.title('Rating vs Number of Reviews (Size indicates Price)')
+plt.tight_layout()
+plt.show()
+```
+
+Nike shoes consistently achieve higher ratings, with a dense cluster in the **4-5 rating range**. This suggests that customers generally rate Nike products more favorably, likely due to a combination of perceived quality, comfort, and innovation. In contrast, Adidas shoes have a broader spread across the **3-5 rating range**, indicating greater variability in customer satisfaction. This spread might imply that Adidas products cater to a wider range of consumer expectations, resulting in mixed reviews.
+
+Both brands have products in the low-rating spectrum (1-2), but Adidas exhibits a noticeably larger cluster in this range. This suggests that more Adidas products are receiving negative feedback compared to Nike. The higher concentration of low ratings for Adidas could stem from quality or performance issues in specific models, or it could indicate that Adidas caters to more budget-friendly segments, where customer expectations are varied.
+
+The size of each circle, which represents the listing price, shows some interesting trends. Nike’s high-priced shoes (larger orange circles) tend to have high ratings, indicating that customers see value in Nike’s premium offerings. This could be attributed to Nike's strong emphasis on technology and design in their higher-end models, which appeals to consumers willing to pay more for these features. On the other hand, Adidas has fewer high-priced, high-rated products in this dataset, suggesting that its higher-end offerings may not consistently match the perceived value of Nike's.
+
+Nike’s highly rated shoes generally have **fewer reviews** (mostly under 100), which could indicate that these models are newer releases or cater to niche markets. This aligns with Nike's strategy of targeting specific consumer segments and releasing limited editions, creating exclusivity and driving up perceived value. In contrast, Adidas shoes have reviews spread more evenly across the **entire review count range** (from 0 up to 200+), indicating a broader appeal and potentially more established products that have accumulated more feedback.
+
+```{python, warning = FALSE, message = FALSE}
+# 3. Average Price Comparison
+plt.figure(figsize=(8, 7))
+sns.barplot(x='Brand', y='Listing Price', data=df, errorbar=None)
+plt.title('Average Listing Price by Brand')
+plt.ylabel('Price ($)')
+plt.show()
+```
+
+Adidas's average price is visibly higher than Nike’s, reaching approximately **7,000 USD** compared to Nike’s average of about **4,000 USD**. This substantial difference suggests that Adidas may focus more on high-end or premium-priced models, potentially with luxury collaborations, limited editions, or specialized technology that commands a higher price point.
+
+The higher average price for Adidas could also reflect its strategy of positioning itself as a premium brand within certain segments. Higher prices can impact consumer perception, where Adidas is viewed as offering exclusive, high-value footwear that justifies a higher cost. On the other hand, Nike’s lower average price suggests that it targets a broader, potentially more budget-conscious audience. Nike’s pricing strategy may be aimed at maintaining accessibility to a larger market, balancing affordability with innovation.
+
+Adidas's premium pricing aligns with a luxury or niche market positioning, possibly focusing on unique models and brand collaborations that can command higher prices. Meanwhile, Nike’s relatively lower pricing indicates a strategic emphasis on volume, appealing to a diverse range of consumers while still offering high-performance products.
